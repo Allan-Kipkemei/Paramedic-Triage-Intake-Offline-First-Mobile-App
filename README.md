@@ -1,33 +1,50 @@
 # 🚑 Paramedic Triage Intake
 
-> **Offline-first mobile triage application built with React Native (Expo) and TypeScript.**
->
-> Designed for emergency responders to record patient triage information even without internet connectivity. Every submission is stored locally first and automatically synchronized when the device reconnects.
-
 <p align="center">
-  <img src="ezgif-738fe5ddbf9ec7e5.gif" alt="Paramedic Triage Demo" width="330"/>
+  <strong>Offline-First Mobile Triage Application</strong><br>
+  Built with <strong>React Native (Expo)</strong>, <strong>TypeScript</strong>, and <strong>Zustand</strong>.
 </p>
 
 <p align="center">
-  <img src="photo_5947458141144419833_y (1).jpg" alt="App Screenshot" width="330"/>
+Designed for emergency responders to capture patient triage information even without internet connectivity.
+Every submission is stored locally first and automatically synchronized once the device reconnects.
+</p>
+
+<p align="center">
+  <img src="./triage-demo.gif" alt="Paramedic Triage Demo" width="280"/>
+</p>
+
+<p align="center">
+  <img src="./app-screenshot.jpg" alt="Paramedic Triage Screenshot" width="220"/>
+</p>
+
+<p align="center">
+
+![React Native](https://img.shields.io/badge/React_Native-0.81-blue?logo=react)
+![Expo](https://img.shields.io/badge/Expo-SDK_54-black?logo=expo)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript)
+![Zustand](https://img.shields.io/badge/Zustand-State_Management-orange)
+![AsyncStorage](https://img.shields.io/badge/Storage-AsyncStorage-green)
+![Offline First](https://img.shields.io/badge/Architecture-Offline_First-success)
+
 </p>
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-- 📱 Offline-first architecture
-- 💾 Instant local persistence using AsyncStorage
+- 🚑 Capture patient triage information quickly
+- 💾 Offline-first architecture with local persistence
 - 🔄 Automatic background synchronization
-- 📡 Network connectivity detection using NetInfo
-- ⚡ Optimistic UI with zero waiting during submission
-- 🚑 Emergency priority classification (P1–P5)
-- 📍 Patient status tracking
-- 🧪 Unit tests with Jest
+- 📡 Network monitoring using NetInfo
+- ⚡ Instant submissions with optimistic updates
+- 🏥 Priority classification (P1–P5)
+- 📍 Patient transport status tracking
+- 🧪 Unit tested using Jest
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
@@ -35,7 +52,7 @@
 | TypeScript | Type safety |
 | Zustand | State management |
 | AsyncStorage | Local persistence |
-| NetInfo | Connectivity detection |
+| NetInfo | Network connectivity detection |
 | Jest + jest-expo | Unit testing |
 
 ---
@@ -60,105 +77,177 @@ services/
 __tests__/
 ```
 
-### Design Principles
+## Design Principles
 
-- **Presentation Layer** → Pure React components
-- **State Layer** → Zustand store
-- **Persistence Layer** → AsyncStorage
-- **Network Layer** → Mock API
-- **Sync Layer** → Background synchronization
+The application follows a clean separation of concerns.
 
-Each layer has a single responsibility, making the application easy to maintain, test, and extend.
+### Presentation Layer
+
+- React Native components
+- Pure UI
+- No persistence logic
+
+### State Layer
+
+Managed using **Zustand**.
+
+Responsible for:
+
+- Managing application state
+- Coordinating storage
+- Triggering synchronization
+
+### Persistence Layer
+
+Implemented using AsyncStorage.
+
+Responsible for:
+
+- Saving records locally
+- Loading cached records
+- Updating synchronization status
+
+### Network Layer
+
+A mock API simulates:
+
+- POST `/api/v1/triage`
+- Network latency
+- Random failures
+
+### Synchronization Layer
+
+Handles:
+
+- Connectivity changes
+- Retry logic
+- Background synchronization
+- Queue processing
 
 ---
 
 # 🔄 Offline-First Synchronization
 
-The application guarantees that **no patient record is lost because of network issues.**
+The application guarantees that patient records are never lost because of network interruptions.
 
-### 1. Local First
+## 1. Local Persistence
 
 When a paramedic submits a record:
 
-- It is immediately saved to AsyncStorage.
+- The record is immediately written to AsyncStorage.
 - The UI updates instantly.
 - No internet connection is required.
 
 ---
 
-### 2. Sync Attempt
+## 2. Sync Attempt
 
-Immediately after saving, the app attempts to send the record using the mock API.
+Immediately after saving, the application attempts to synchronize the record.
 
-If offline, nothing fails—the record simply remains queued.
+If no connection is available, the record simply remains queued.
 
 ---
 
-### 3. Automatic Retry
+## 3. Automatic Retry
 
-Queued records automatically retry when:
+Queued records automatically synchronize whenever:
 
-- The device reconnects to the internet.
+- Internet connectivity returns.
 - The application returns to the foreground.
 
 No user interaction is required.
 
 ---
 
-### 4. Safe Synchronization
+## 4. Synchronization Lock
 
-A synchronization lock prevents multiple sync operations from running simultaneously.
+A synchronization lock prevents multiple synchronization jobs from running simultaneously.
 
-Each queued record is processed independently, so one failed upload never blocks the others.
+This avoids race conditions when multiple events trigger synchronization at nearly the same time.
 
 ---
 
-### 5. Live Status Updates
+## 5. Failure Isolation
 
-Every record displays its current synchronization state:
+Each queued record is synchronized independently.
+
+If one upload fails:
+
+- It remains queued.
+- Successfully uploaded records remain synced.
+- Failed records retry automatically during the next synchronization cycle.
+
+---
+
+## 6. Live Sync Status
+
+Each record displays its synchronization status.
 
 - 🟢 **SYNCED**
 - 🟡 **QUEUED**
 
-A banner also displays the total number of pending records waiting for synchronization.
+A banner also indicates how many records are currently waiting for synchronization.
 
 ---
 
 # 🌐 Mock API
 
-A real backend is intentionally omitted for this assessment.
+This assessment intentionally does not include a backend server.
 
-Instead, `services/api.ts` simulates:
+Instead, the application uses a mock repository (`services/api.ts`) that simulates:
 
-- `POST /api/v1/triage`
+- POST `/api/v1/triage`
 - ⏱ 2-second network delay
 - ❌ 30% random network failure
 
-This allows the offline queue and retry mechanism to be demonstrated realistically.
+This makes it possible to fully demonstrate the offline queue and automatic retry mechanism.
+
+---
+
+# 📂 Project Structure
+
+```
+.
+├── components/
+├── services/
+│   ├── api.ts
+│   ├── storage.ts
+│   ├── sync.ts
+│   └── types.ts
+│
+├── store/
+├── __tests__/
+│
+├── triage-demo.gif
+├── app-screenshot.jpg
+├── App.tsx
+├── package.json
+└── README.md
+```
 
 ---
 
 # 🚀 Getting Started
 
-Install dependencies:
+Install dependencies
 
 ```bash
 npm install
 ```
 
-Start Expo:
+Start Expo
 
 ```bash
 npx expo start
 ```
 
-Run on Android:
+Run on Android
 
 ```bash
 npm run android
 ```
 
-Run on iOS:
+Run on iOS
 
 ```bash
 npm run ios
@@ -174,46 +263,29 @@ npm test
 
 ---
 
-# 📽 Demonstrating Offline Mode
+# 🎥 Demonstrating Offline Mode
 
 1. Enable Airplane Mode.
-2. Create and submit a triage record.
-3. Observe the record being saved immediately with a **QUEUED** status.
-4. Disable Airplane Mode.
-5. Wait a few seconds.
-6. The queued record automatically changes to **SYNCED** without any user action.
+2. Complete the triage form.
+3. Submit the record.
+4. Observe that the record is immediately saved with a **QUEUED** status.
+5. Disable Airplane Mode.
+6. Within a few seconds, the record automatically changes to **SYNCED** without any user interaction.
 
 ---
 
-# 📂 Project Structure
-
-```
-.
-├── assets/
-│   ├── paramedic-triage-demo.gif
-│   └── app-screenshot.jpg
-│
-├── components/
-├── services/
-├── store/
-├── __tests__/
-│
-├── App.tsx
-├── package.json
-└── README.md
-```
-
----
-
-# 📌 Assessment Notes
+# 📌 Assessment Highlights
 
 This project demonstrates:
 
-- Offline-first mobile application design
-- Local-first data persistence
-- Automatic background synchronization
-- Separation of concerns
-- Clean architecture
-- State management with Zustand
-- Resilient handling of intermittent network connectivity
-- Testable service and storage layers
+- ✅ Offline-first mobile application design
+- ✅ Local-first data persistence
+- ✅ Automatic background synchronization
+- ✅ Mock network layer
+- ✅ Optimistic UI updates
+- ✅ Network failure recovery
+- ✅ Separation of concerns
+- ✅ Clean architecture
+- ✅ Zustand state management
+- ✅ AsyncStorage persistence
+- ✅ Unit testing with Jest
