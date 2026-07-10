@@ -8,7 +8,11 @@ first, then synced in the background the moment the network comes back.
 
 ### Demo video
 
-[Watch the offline-first sync demo](./IMG_9520.MOV)
+<video src="./IMG_9520.MOV" controls width="320">
+  Your browser does not support embedded videos.
+</video>
+
+[Open the demo video](./IMG_9520.MOV)
 
 ### App photos
 
