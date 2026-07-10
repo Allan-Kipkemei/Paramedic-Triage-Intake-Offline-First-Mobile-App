@@ -4,6 +4,16 @@ A field triage intake app for paramedics, built with **React Native (Expo) + Typ
 Designed so that a submission never fails due to connectivity — records are saved locally
 first, then synced in the background the moment the network comes back.
 
+## Showcase
+
+### Demo video
+
+[Watch the offline-first sync demo](./IMG_9520.MOV)
+
+### App photos
+
+<img src="./photo_5947458141144419833_y%20(1).jpg" alt="Paramedic triage app screenshot" width="320" />
+
 ## Stack
 
 | Concern | Choice | Why |
