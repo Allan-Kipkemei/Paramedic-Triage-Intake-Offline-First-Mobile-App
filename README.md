@@ -11,11 +11,11 @@ Every submission is stored locally first and automatically synchronized once the
 </p>
 
 <p align="center">
-  <img src="ezgif-738fe5ddbf9ec7e5.gif" alt="Paramedic Triage Demo" width="280"/>
+  <img src="ezgif-738fe5ddbf9ec7e5.gif" alt="Paramedic Triage Demo" width="100"/>
 </p>
 
 <p align="center">
-  <img src="photo_5947458141144419836_y.jpg" alt="Paramedic Triage Screenshot" width="220"/>
+  <img src="photo_5947458141144419836_y.jpg" alt="Paramedic Triage Screenshot" width="100"/>
 </p>
 
 <p align="center">
