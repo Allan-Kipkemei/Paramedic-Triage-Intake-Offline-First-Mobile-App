@@ -5,7 +5,7 @@
 > Designed for emergency responders to record patient triage information even without internet connectivity. Every submission is stored locally first and automatically synchronized when the device reconnects.
 
 <p align="center">
-  <img src="ezgif-738fe5ddbf9ec7e5" alt="Paramedic Triage Demo" width="330"/>
+  <img src="ezgif-738fe5ddbf9ec7e5.gif" alt="Paramedic Triage Demo" width="330"/>
 </p>
 
 <p align="center">
