@@ -15,7 +15,7 @@ Every submission is stored locally first and automatically synchronized once the
 </p>
 
 <p align="center">
-  <img src="photo_5947458141144419833_y(1).jpg" alt="Paramedic Triage Screenshot" width="220"/>
+  <img src="photo_5947458141144419836_y.jpg" alt="Paramedic Triage Screenshot" width="220"/>
 </p>
 
 <p align="center">
