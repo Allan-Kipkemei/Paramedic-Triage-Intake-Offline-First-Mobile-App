@@ -1,115 +1,219 @@
-# Paramedic Triage Intake — Offline-First Mobile App
+# 🚑 Paramedic Triage Intake
 
-A field triage intake app for paramedics, built with **React Native (Expo) + TypeScript**.
-Designed so that a submission never fails due to connectivity — records are saved locally
-first, then synced in the background the moment the network comes back.
+> **Offline-first mobile triage application built with React Native (Expo) and TypeScript.**
+>
+> Designed for emergency responders to record patient triage information even without internet connectivity. Every submission is stored locally first and automatically synchronized when the device reconnects.
 
-## Showcase
+<p align="center">
+  <img src="./assets/paramedic-triage-demo.gif" alt="Paramedic Triage Demo" width="330"/>
+</p>
 
-### Demo video
+<p align="center">
+  <img src="./assets/app-screenshot.jpg" alt="App Screenshot" width="330"/>
+</p>
 
-<video src="./IMG_9520.MOV" controls width="320">
-  Your browser does not support embedded videos.
-</video>
+---
 
-[Open the demo video](./IMG_9520.MOV)
+## ✨ Features
 
-### App photos
+- 📱 Offline-first architecture
+- 💾 Instant local persistence using AsyncStorage
+- 🔄 Automatic background synchronization
+- 📡 Network connectivity detection using NetInfo
+- ⚡ Optimistic UI with zero waiting during submission
+- 🚑 Emergency priority classification (P1–P5)
+- 📍 Patient status tracking
+- 🧪 Unit tests with Jest
 
-<img src="./photo_5947458141144419833_y%20(1).jpg" alt="Paramedic triage app screenshot" width="320" />
+---
 
-## Stack
+## 🛠 Tech Stack
 
-| Concern | Choice | Why |
-|---|---|---|
-| Framework | Expo (React Native) + TypeScript | Fast to run on a real device via Expo Go, no native build step needed for the demo |
-| State management | Zustand | Minimal boilerplate, keeps UI components decoupled from persistence/sync logic |
-| Local persistence | `@react-native-async-storage/async-storage` | Lightweight, zero native config, sufficient for a flat list of triage records at assessment scale |
-| Connectivity | `@react-native-community/netinfo` | Standard for detecting reconnection events on RN |
-| Testing | Jest + `jest-expo` | Default RN testing setup |
+| Technology | Purpose |
+|------------|---------|
+| React Native (Expo) | Mobile framework |
+| TypeScript | Type safety |
+| Zustand | State management |
+| AsyncStorage | Local persistence |
+| NetInfo | Connectivity detection |
+| Jest + jest-expo | Unit testing |
 
-> Persistence is isolated behind `services/storage.ts`. Swapping AsyncStorage for
-> SQLite / WatermelonDB / MMKV later means changing one file — the store and UI
-> are untouched.
+---
 
-## Architecture
+# 🏗 Architecture
 
 ```
-components/        <- pure UI, no persistence or network code
-  TriageForm.tsx
-  RecordList.tsx
-  PriorityBadge.tsx
+components/
+├── TriageForm.tsx
+├── RecordList.tsx
+└── PriorityBadge.tsx
 
 store/
-  useTriageStore.ts <- single source of truth for UI state (Zustand)
+└── useTriageStore.ts
 
 services/
-  types.ts          <- shared TriageRecord type
-  storage.ts         <- local persistence layer (swappable)
-  api.ts              <- mock POST /api/v1/triage (2s delay + 30% random failure)
-  sync.ts              <- background sync queue + connectivity/app-state listeners
+├── api.ts
+├── storage.ts
+├── sync.ts
+└── types.ts
 
-__tests__/               <- unit tests for storage + sync
+__tests__/
 ```
 
-**Separation of concerns:** UI components only ever call `useTriageStore`. The
-store is the only thing that talks to `storage.ts` and `sync.ts`. Neither
-`storage.ts` nor `sync.ts` know that React exists — they're plain async
-functions, which makes them trivially unit-testable without rendering any UI.
+### Design Principles
 
-## How the offline-first sync queue works
+- **Presentation Layer** → Pure React components
+- **State Layer** → Zustand store
+- **Persistence Layer** → AsyncStorage
+- **Network Layer** → Mock API
+- **Sync Layer** → Background synchronization
 
-1. **Submit is always instant.** `addRecord()` in the store writes to
-   AsyncStorage immediately and returns — there is no network round-trip in
-   the submit path. The paramedic never sees a spinner tied to connectivity.
-2. **Optimistic sync attempt.** Right after saving, the store calls
-   `trySync()`, which checks `NetInfo.fetch()`. If offline, it no-ops
-   silently — no error shown, no retry loop spun up.
-3. **Two independent triggers pick it back up:**
-   - `NetInfo.addEventListener` fires when the device transitions from
-     offline → online, and calls `trySync()`.
-   - `AppState.addEventListener` fires when the app returns to the
-     foreground, as a safety net for cases where the OS suspended the
-     connectivity listener while backgrounded.
-4. **A `isSyncing` lock** prevents two sync passes from racing each other if
-   both triggers fire close together (e.g. reconnecting right as you
-   foreground the app).
-5. **Per-record failure isolation.** `trySync()` loops through all pending
-   records and posts them one at a time. If one fails (simulated by the mock
-   API's 30% random failure rate), it stays `synced: false` and is retried
-   on the *next* sync trigger — it doesn't block or roll back the rest of
-   the batch.
-6. **UI reflects sync state live.** Each record shows a `SYNCED` / `QUEUED`
-   tag, and a banner shows the count of records still pending, both driven
-   by AsyncStorage state via the Zustand store.
+Each layer has a single responsibility, making the application easy to maintain, test, and extend.
 
-## Mock server
+---
 
-Per the assessment note, there's no live backend. `services/api.ts` simulates
-`POST /api/v1/triage` with a 2-second artificial delay and a 30% random
-failure rate, so the retry path is actually exercised rather than just the
-happy path.
+# 🔄 Offline-First Synchronization
 
-## Running it
+The application guarantees that **no patient record is lost because of network issues.**
+
+### 1. Local First
+
+When a paramedic submits a record:
+
+- It is immediately saved to AsyncStorage.
+- The UI updates instantly.
+- No internet connection is required.
+
+---
+
+### 2. Sync Attempt
+
+Immediately after saving, the app attempts to send the record using the mock API.
+
+If offline, nothing fails—the record simply remains queued.
+
+---
+
+### 3. Automatic Retry
+
+Queued records automatically retry when:
+
+- The device reconnects to the internet.
+- The application returns to the foreground.
+
+No user interaction is required.
+
+---
+
+### 4. Safe Synchronization
+
+A synchronization lock prevents multiple sync operations from running simultaneously.
+
+Each queued record is processed independently, so one failed upload never blocks the others.
+
+---
+
+### 5. Live Status Updates
+
+Every record displays its current synchronization state:
+
+- 🟢 **SYNCED**
+- 🟡 **QUEUED**
+
+A banner also displays the total number of pending records waiting for synchronization.
+
+---
+
+# 🌐 Mock API
+
+A real backend is intentionally omitted for this assessment.
+
+Instead, `services/api.ts` simulates:
+
+- `POST /api/v1/triage`
+- ⏱ 2-second network delay
+- ❌ 30% random network failure
+
+This allows the offline queue and retry mechanism to be demonstrated realistically.
+
+---
+
+# 🚀 Getting Started
+
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Start Expo:
+
+```bash
 npx expo start
 ```
 
-Scan the QR code with Expo Go (Android/iOS) or run `npm run android` / `npm run ios`.
+Run on Android:
 
-## Running tests
+```bash
+npm run android
+```
+
+Run on iOS:
+
+```bash
+npm run ios
+```
+
+---
+
+# 🧪 Running Tests
 
 ```bash
 npm test
 ```
 
-## Demoing the offline behavior (for the video clip)
+---
 
-1. Turn on Airplane Mode.
-2. Fill in and submit a triage record — it saves instantly, no error, and
-   shows a `QUEUED` tag with a "records queued for sync" banner.
-3. Turn off Airplane Mode.
-4. Within a few seconds the record flips to `SYNCED` and the pending banner
-   disappears — no user action required.
+# 📽 Demonstrating Offline Mode
+
+1. Enable Airplane Mode.
+2. Create and submit a triage record.
+3. Observe the record being saved immediately with a **QUEUED** status.
+4. Disable Airplane Mode.
+5. Wait a few seconds.
+6. The queued record automatically changes to **SYNCED** without any user action.
+
+---
+
+# 📂 Project Structure
+
+```
+.
+├── assets/
+│   ├── paramedic-triage-demo.gif
+│   └── app-screenshot.jpg
+│
+├── components/
+├── services/
+├── store/
+├── __tests__/
+│
+├── App.tsx
+├── package.json
+└── README.md
+```
+
+---
+
+# 📌 Assessment Notes
+
+This project demonstrates:
+
+- Offline-first mobile application design
+- Local-first data persistence
+- Automatic background synchronization
+- Separation of concerns
+- Clean architecture
+- State management with Zustand
+- Resilient handling of intermittent network connectivity
+- Testable service and storage layers
