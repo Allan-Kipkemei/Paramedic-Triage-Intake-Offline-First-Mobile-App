@@ -11,11 +11,11 @@ Every submission is stored locally first and automatically synchronized once the
 </p>
 
 <p align="center">
-  <img src="./triage-demo.gif" alt="Paramedic Triage Demo" width="280"/>
+  <img src="ezgif-738fe5ddbf9ec7e5.gif" alt="Paramedic Triage Demo" width="280"/>
 </p>
 
 <p align="center">
-  <img src="./app-screenshot.jpg" alt="Paramedic Triage Screenshot" width="220"/>
+  <img src="photo_5947458141144419833_y(1).jpg" alt="Paramedic Triage Screenshot" width="220"/>
 </p>
 
 <p align="center">
@@ -59,7 +59,7 @@ Every submission is stored locally first and automatically synchronized once the
 
 # 🏗 Architecture
 
-```
+```text
 components/
 ├── TriageForm.tsx
 ├── RecordList.tsx
@@ -83,9 +83,8 @@ The application follows a clean separation of concerns.
 
 ### Presentation Layer
 
-- React Native components
-- Pure UI
-- No persistence logic
+- Pure React Native UI components
+- No persistence or networking logic
 
 ### State Layer
 
@@ -117,9 +116,9 @@ A mock API simulates:
 
 ### Synchronization Layer
 
-Handles:
+Responsible for:
 
-- Connectivity changes
+- Connectivity monitoring
 - Retry logic
 - Background synchronization
 - Queue processing
@@ -144,7 +143,7 @@ When a paramedic submits a record:
 
 Immediately after saving, the application attempts to synchronize the record.
 
-If no connection is available, the record simply remains queued.
+If the device is offline, the record remains safely queued.
 
 ---
 
@@ -163,7 +162,7 @@ No user interaction is required.
 
 A synchronization lock prevents multiple synchronization jobs from running simultaneously.
 
-This avoids race conditions when multiple events trigger synchronization at nearly the same time.
+This avoids race conditions when multiple events trigger synchronization.
 
 ---
 
@@ -174,39 +173,39 @@ Each queued record is synchronized independently.
 If one upload fails:
 
 - It remains queued.
-- Successfully uploaded records remain synced.
+- Successfully uploaded records stay synchronized.
 - Failed records retry automatically during the next synchronization cycle.
 
 ---
 
 ## 6. Live Sync Status
 
-Each record displays its synchronization status.
+Every record displays its synchronization status.
 
 - 🟢 **SYNCED**
 - 🟡 **QUEUED**
 
-A banner also indicates how many records are currently waiting for synchronization.
+A banner also indicates how many records are waiting for synchronization.
 
 ---
 
 # 🌐 Mock API
 
-This assessment intentionally does not include a backend server.
+This assessment intentionally does not include a live backend server.
 
-Instead, the application uses a mock repository (`services/api.ts`) that simulates:
+Instead, `services/api.ts` simulates:
 
-- POST `/api/v1/triage`
+- `POST /api/v1/triage`
 - ⏱ 2-second network delay
 - ❌ 30% random network failure
 
-This makes it possible to fully demonstrate the offline queue and automatic retry mechanism.
+This allows the offline queue and automatic retry mechanism to be demonstrated realistically.
 
 ---
 
 # 📂 Project Structure
 
-```
+```text
 .
 ├── components/
 ├── services/
@@ -218,8 +217,8 @@ This makes it possible to fully demonstrate the offline queue and automatic retr
 ├── store/
 ├── __tests__/
 │
-├── triage-demo.gif
-├── app-screenshot.jpg
+├── ezgif-738fe5ddbf9ec7e5.gif
+├── photo_5947458141144419833_y (1).jpg
 ├── App.tsx
 ├── package.json
 └── README.md
@@ -229,25 +228,25 @@ This makes it possible to fully demonstrate the offline queue and automatic retr
 
 # 🚀 Getting Started
 
-Install dependencies
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Start Expo
+Start Expo:
 
 ```bash
 npx expo start
 ```
 
-Run on Android
+Run on Android:
 
 ```bash
 npm run android
 ```
 
-Run on iOS
+Run on iOS:
 
 ```bash
 npm run ios
@@ -276,15 +275,12 @@ npm test
 
 # 📌 Assessment Highlights
 
-This project demonstrates:
-
-- ✅ Offline-first mobile application design
+- ✅ Offline-first mobile application
 - ✅ Local-first data persistence
 - ✅ Automatic background synchronization
-- ✅ Mock network layer
+- ✅ Mock network layer with retry logic
 - ✅ Optimistic UI updates
-- ✅ Network failure recovery
-- ✅ Separation of concerns
+- ✅ Resilient handling of intermittent connectivity
 - ✅ Clean architecture
 - ✅ Zustand state management
 - ✅ AsyncStorage persistence
