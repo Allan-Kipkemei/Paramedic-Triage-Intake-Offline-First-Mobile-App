@@ -46,11 +46,17 @@ export default function App() {
             behavior={Platform.OS === 'ios' ? 'padding' : undefined}
             keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
           >
-            <Text style={styles.header}>Paramedic Triage Intake</Text>
+            <View style={styles.headerPanel}>
+              <Text style={styles.kicker}>Offline field capture</Text>
+              <Text style={styles.header}>Paramedic Triage Intake</Text>
+              <Text style={styles.subheader}>Save now. Sync automatically when signal returns.</Text>
+            </View>
             {pendingCount > 0 && (
-              <Text style={styles.pendingBanner}>
-                {pendingCount} record{pendingCount > 1 ? 's' : ''} queued for sync
-              </Text>
+              <View style={styles.pendingBanner}>
+                <Text style={styles.pendingText}>
+                  {pendingCount} record{pendingCount > 1 ? 's' : ''} queued for sync
+                </Text>
+              </View>
             )}
             <TriageForm />
             <RecordList />
@@ -62,14 +68,48 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F5F5' },
+  container: { flex: 1, backgroundColor: '#EEF3F6' },
   fill: { flex: 1 },
-  header: { fontSize: 20, fontWeight: '800', paddingHorizontal: 16, paddingTop: 12 },
+  headerPanel: {
+    backgroundColor: '#0F3443',
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 18,
+    borderBottomLeftRadius: 18,
+    borderBottomRightRadius: 18,
+  },
+  kicker: {
+    color: '#9ED8C5',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+  },
+  header: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    fontWeight: '900',
+    marginTop: 4,
+  },
+  subheader: {
+    color: '#DDECEF',
+    fontSize: 13,
+    fontWeight: '600',
+    marginTop: 6,
+  },
   pendingBanner: {
     marginHorizontal: 16,
-    marginTop: 6,
-    color: '#B00020',
-    fontWeight: '600',
+    marginTop: 12,
+    backgroundColor: '#FFF3E0',
+    borderColor: '#F59E0B',
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  pendingText: {
+    color: '#92400E',
+    fontWeight: '800',
     fontSize: 13,
   },
 });
