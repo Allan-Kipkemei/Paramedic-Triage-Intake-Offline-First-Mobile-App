@@ -28,9 +28,9 @@ export function PriorityBadge({ level }: { level: PriorityLevel }) {
 
 const styles = StyleSheet.create({
   badge: {
-    paddingVertical: 4,
+    paddingVertical: 5,
     paddingHorizontal: 10,
-    borderRadius: 6,
+    borderRadius: 8,
     alignSelf: 'flex-start',
   },
   text: {

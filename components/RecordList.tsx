@@ -4,14 +4,17 @@ import { useTriageStore } from '../store/useTriageStore';
 import { PriorityBadge } from './PriorityBadge';
 
 export function RecordList() {
-  const records = useTriageStore(state => state.records);
+  const records = useTriageStore(state => state.records) ?? [];
 
   return (
     <FlatList
       style={styles.list}
       data={records}
       keyExtractor={item => item.id}
-      contentContainerStyle={{ paddingBottom: 40 }}
+      contentContainerStyle={styles.listContent}
+      ListHeaderComponent={
+        records.length > 0 ? <Text style={styles.sectionTitle}>Recent records</Text> : null
+      }
       renderItem={({ item }) => (
         <View style={styles.row}>
           <PriorityBadge level={item.priority} />
@@ -30,19 +33,39 @@ export function RecordList() {
 }
 
 const styles = StyleSheet.create({
-  list: { marginTop: 8, paddingHorizontal: 16 },
+  list: { marginTop: 10, paddingHorizontal: 16 },
+  listContent: { paddingBottom: 40 },
+  sectionTitle: {
+    color: '#31434D',
+    fontSize: 13,
+    fontWeight: '900',
+    marginBottom: 8,
+    textTransform: 'uppercase',
+  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
-    padding: 10,
-    borderRadius: 8,
-    marginBottom: 8,
+    backgroundColor: '#FFFFFF',
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#DDE6EB',
   },
-  name: { fontWeight: '700', fontSize: 15 },
-  condition: { color: '#666', fontSize: 13 },
-  syncTag: { fontSize: 11, fontWeight: '700', marginLeft: 8 },
+  name: { color: '#102A38', fontWeight: '800', fontSize: 15 },
+  condition: { color: '#667985', fontSize: 13, marginTop: 2 },
+  syncTag: { fontSize: 11, fontWeight: '900', marginLeft: 8 },
   synced: { color: '#2E7D32' },
   pending: { color: '#B00020' },
-  empty: { textAlign: 'center', color: '#999', marginTop: 30 },
+  empty: {
+    textAlign: 'center',
+    color: '#667985',
+    marginTop: 28,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#DDE6EB',
+    paddingVertical: 18,
+    fontWeight: '700',
+  },
 });

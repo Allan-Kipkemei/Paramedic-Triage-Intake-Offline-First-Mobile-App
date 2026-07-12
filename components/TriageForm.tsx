@@ -67,7 +67,11 @@ export function TriageForm() {
       <Text style={styles.label}>Priority</Text>
       <View style={styles.row}>
         {PRIORITIES.map(p => (
-          <Pressable key={p} onPress={() => setPriority(p)} style={{ opacity: priority === p ? 1 : 0.45 }}>
+          <Pressable
+            key={p}
+            onPress={() => setPriority(p)}
+            style={[styles.priorityButton, priority === p && styles.priorityButtonActive]}
+          >
             <PriorityBadge level={p} />
           </Pressable>
         ))}
@@ -99,43 +103,64 @@ export function TriageForm() {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 18,
     marginHorizontal: 16,
-    marginTop: 12,
-    borderWidth: 2,
-    borderColor: '#eee',
+    marginTop: 14,
+    borderWidth: 1,
+    borderColor: '#D8E1E6',
+    shadowColor: '#0B2230',
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
   },
   cardCritical: {
     borderColor: '#B00020',
+    backgroundColor: '#FFF8F8',
   },
-  label: { fontSize: 13, fontWeight: '600', marginTop: 12, marginBottom: 6, color: '#333' },
+  label: { fontSize: 13, fontWeight: '800', marginTop: 12, marginBottom: 6, color: '#22313A' },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
+    borderColor: '#C8D3DA',
+    borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
     fontSize: 16,
+    backgroundColor: '#F8FAFB',
+    color: '#102A38',
   },
   multiline: { minHeight: 70, textAlignVertical: 'top' },
   row: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  priorityButton: {
+    opacity: 0.55,
+    borderRadius: 9,
+  },
+  priorityButtonActive: {
+    opacity: 1,
+    shadowColor: '#0B2230',
+    shadowOpacity: 0.16,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 2,
+  },
   statusChip: {
     paddingVertical: 8,
     paddingHorizontal: 14,
-    borderRadius: 20,
+    borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#999',
+    borderColor: '#AAB8C2',
+    backgroundColor: '#F8FAFB',
   },
-  statusChipActive: { backgroundColor: '#1565C0', borderColor: '#1565C0' },
-  statusText: { color: '#333', fontWeight: '600' },
+  statusChipActive: { backgroundColor: '#0F766E', borderColor: '#0F766E' },
+  statusText: { color: '#31434D', fontWeight: '800' },
   statusTextActive: { color: '#fff' },
   submitButton: {
     marginTop: 20,
-    backgroundColor: '#1565C0',
+    backgroundColor: '#0F3443',
     paddingVertical: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
   },
   submitText: { color: '#fff', fontWeight: '700', fontSize: 16 },
