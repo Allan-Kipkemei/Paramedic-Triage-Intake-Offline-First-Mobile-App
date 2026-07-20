@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   View,
+  Pressable,
 } from 'react-native';
 import { TriageForm } from './components/TriageForm';
 import { RecordList } from './components/RecordList';
@@ -47,8 +48,20 @@ export default function App() {
             keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
           >
             <View style={styles.headerPanel}>
-              <Text style={styles.kicker}>Offline field capture</Text>
-              <Text style={styles.header}>Paramedic Triage Intake</Text>
+              <View style={styles.headerTopRow}>
+                <View style={styles.headerCopy}>
+                  <Text style={styles.kicker}>Offline field capture</Text>
+                  <Text style={styles.header}>Paramedic Triage Intake</Text>
+                </View>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel="Open user profile"
+                  testID="profile-avatar"
+                  style={({ pressed }) => [styles.avatarButton, pressed && styles.avatarButtonPressed]}
+                >
+                  <Text style={styles.avatarInitials}>PM</Text>
+                </Pressable>
+              </View>
               <Text style={styles.subheader}>Save now. Sync automatically when signal returns.</Text>
             </View>
             {pendingCount > 0 && (
@@ -61,6 +74,20 @@ export default function App() {
             <TriageForm />
             <RecordList />
           </KeyboardAvoidingView>
+          <View style={styles.bottomNav}>
+            <Pressable style={[styles.navItem, styles.navItemActive]}>
+              <Text style={[styles.navIcon, styles.navIconActive]}>+</Text>
+              <Text style={[styles.navLabel, styles.navLabelActive]}>Intake</Text>
+            </Pressable>
+            <Pressable style={styles.navItem}>
+              <Text style={styles.navIcon}>#</Text>
+              <Text style={styles.navLabel}>Queue</Text>
+            </Pressable>
+            <Pressable style={styles.navItem}>
+              <Text style={styles.navIcon}>@</Text>
+              <Text style={styles.navLabel}>Profile</Text>
+            </Pressable>
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
@@ -74,9 +101,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F3443',
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 18,
+    paddingBottom: 16,
     borderBottomLeftRadius: 18,
     borderBottomRightRadius: 18,
+  },
+  headerTopRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  headerCopy: {
+    flex: 1,
+    minWidth: 0,
   },
   kicker: {
     color: '#9ED8C5',
@@ -90,6 +127,24 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '900',
     marginTop: 4,
+  },
+  avatarButton: {
+    alignItems: 'center',
+    backgroundColor: '#E7F6F1',
+    borderColor: '#9ED8C5',
+    borderRadius: 24,
+    borderWidth: 2,
+    height: 48,
+    justifyContent: 'center',
+    width: 48,
+  },
+  avatarButtonPressed: {
+    opacity: 0.75,
+  },
+  avatarInitials: {
+    color: '#0F3443',
+    fontSize: 15,
+    fontWeight: '900',
   },
   subheader: {
     color: '#DDECEF',
@@ -111,5 +166,53 @@ const styles = StyleSheet.create({
     color: '#92400E',
     fontWeight: '800',
     fontSize: 13,
+  },
+  bottomNav: {
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#D8E1E6',
+    borderRadius: 16,
+    borderWidth: 1,
+    bottom: 12,
+    elevation: 8,
+    flexDirection: 'row',
+    gap: 8,
+    left: 16,
+    padding: 8,
+    position: 'absolute',
+    right: 16,
+    shadowColor: '#0B2230',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.12,
+    shadowRadius: 14,
+  },
+  navItem: {
+    alignItems: 'center',
+    borderRadius: 12,
+    flex: 1,
+    minHeight: 54,
+    justifyContent: 'center',
+    paddingVertical: 7,
+  },
+  navItemActive: {
+    backgroundColor: '#0F3443',
+  },
+  navIcon: {
+    color: '#667985',
+    fontSize: 17,
+    fontWeight: '900',
+    lineHeight: 20,
+  },
+  navIconActive: {
+    color: '#FFFFFF',
+  },
+  navLabel: {
+    color: '#667985',
+    fontSize: 11,
+    fontWeight: '900',
+    marginTop: 2,
+  },
+  navLabelActive: {
+    color: '#FFFFFF',
   },
 });
