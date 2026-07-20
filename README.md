@@ -19,6 +19,9 @@ Every submission is stored locally first and automatically synchronized once the
 </p>
 
 <p align="center">
+  <img src="photo_596613031984696906_jpg" alt="Paramedic Triage Screenshot" width="150"/>
+</p>
+<p align="center">
 
 ![React Native](https://img.shields.io/badge/React_Native-0.81-blue?logo=react)
 ![Expo](https://img.shields.io/badge/Expo-SDK_54-black?logo=expo)
