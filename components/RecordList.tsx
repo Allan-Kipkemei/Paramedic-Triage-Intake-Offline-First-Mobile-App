@@ -34,7 +34,7 @@ export function RecordList() {
 
 const styles = StyleSheet.create({
   list: { marginTop: 10, paddingHorizontal: 16 },
-  listContent: { paddingBottom: 40 },
+  listContent: { paddingBottom: 112 },
   sectionTitle: {
     color: '#31434D',
     fontSize: 13,
